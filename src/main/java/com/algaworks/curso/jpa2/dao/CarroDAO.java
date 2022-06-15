@@ -24,11 +24,15 @@ public class CarroDAO implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<Carro> selectAll() {
-		return manager.createQuery("from Carro").getResultList();
+		//return manager.createQuery("from Carro").getResultList();
+		return manager.createNamedQuery("Carro.buscarTodos").getResultList();
 	}
 	
 	public Carro selectById(Long codigo) {
-		return manager.find(Carro.class, codigo);
+		//return manager.find(Carro.class, codigo);
+		return manager.createNamedQuery("Carro.buscarCarroComAcessorios", Carro.class)
+				.setParameter("codigo", codigo)
+				.getSingleResult();
 	}
 	
 	public Carro selectCarroComAcessorios(Long codigo) {

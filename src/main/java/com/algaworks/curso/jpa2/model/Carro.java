@@ -11,9 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Carro.buscarTodos", query="select c from Carro c"),
+	@NamedQuery(name="Carro.buscarCarroComAcessorios", query="select c from Carro c JOIN c.acessorios a where c.codigo = :codigo")
+})
 public class Carro {
 
 	@Id
