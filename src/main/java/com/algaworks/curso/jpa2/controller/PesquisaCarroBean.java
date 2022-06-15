@@ -11,6 +11,7 @@ import javax.inject.Named;
 
 import com.algaworks.curso.jpa2.dao.CarroDAO;
 import com.algaworks.curso.jpa2.model.Carro;
+import com.algaworks.curso.jpa2.modelolazy.LazyCarroDataModel;
 import com.algaworks.curso.jpa2.service.NegocioException;
 import com.algaworks.curso.jpa2.util.jsf.FacesUtil;
 
@@ -25,10 +26,18 @@ public class PesquisaCarroBean implements Serializable {
 	
 	private List<Carro> carros = new ArrayList<>();
 	
+	private LazyCarroDataModel lazyCarros;
+	
 	private Carro carroSelecionado;
 	
-	public List<Carro> getCarros() {
-		return carros;
+	@PostConstruct
+	public void inicializar() {
+		//carros = carroDAO.selectAll();
+		lazyCarros = new LazyCarroDataModel(carroDAO); //paginação
+	}
+	
+	public void buscarCarroComAcessorios() {
+		carroSelecionado = carroDAO.selectCarroComAcessorios(carroSelecionado.getCodigo());
 	}
 	
 	public void excluir() {
@@ -40,21 +49,20 @@ public class PesquisaCarroBean implements Serializable {
 			FacesUtil.addErrorMessage(e.getMessage());
 		}
 	}
-
+	
+	public List<Carro> getCarros() {
+		return carros;
+	}
+	
 	public Carro getCarroSelecionado() {
 		return carroSelecionado;
 	}
 	public void setCarroSelecionado(Carro carroSelecionado) {
 		this.carroSelecionado = carroSelecionado;
 	}
-
-	@PostConstruct
-	public void inicializar() {
-		carros = carroDAO.selectAll();
-	}
 	
-	public void buscarCarroComAcessorios() {
-		carroSelecionado = carroDAO.selectCarroComAcessorios(carroSelecionado.getCodigo());
+	public LazyCarroDataModel getLazyCarros() {
+		return lazyCarros;
 	}
 	
 }

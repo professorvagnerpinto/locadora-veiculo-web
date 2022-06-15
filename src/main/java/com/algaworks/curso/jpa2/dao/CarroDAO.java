@@ -41,6 +41,20 @@ public class CarroDAO implements Serializable {
 				.getSingleResult();
 	}
 	
+	//****** Paginação *******
+	@SuppressWarnings("unchecked")
+	public List<Carro> buscarComPaginacao(int first, int pageSize) {
+		return manager.createNamedQuery("Carro.buscarTodos")
+							.setFirstResult(first)
+							.setMaxResults(pageSize)
+							.getResultList();
+	}
+
+	public Long encontrarQuantidadeDeCarros() {
+		return manager.createQuery("select count(c) from Carro c", Long.class).getSingleResult();
+	}
+	//****** Fim Paginação *******
+	
 	@Transactional
 	public void excluir(Carro carro) throws NegocioException {
 		carro = selectById(carro.getCodigo());
